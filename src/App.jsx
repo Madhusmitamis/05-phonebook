@@ -3,12 +3,17 @@ import './App.css'
 
 
 const App = () => {
-const [persons, setPersons] = useState([{ name: 'Arto Hellas' }]) 
+const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber]= useState('')
+
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
-  };
+  }
+  const handleNumberChange =(event)=>{
+    setNewNumber(event.target.value)
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -17,9 +22,11 @@ const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
       } else {
     const personObject = {
       name: newName,
+      number:newNumber
     };
     setPersons(persons.concat(personObject));
     setNewName('')
+    setNewNumber('')
   }
 }
 const alertUser = () => {
@@ -32,6 +39,7 @@ const alertUser = () => {
         <div>
           name: <input value={newName} onChange={handleNameChange} />
         </div>
+        <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
         <div>
           <button type="submit">add</button>
         </div>
@@ -40,7 +48,7 @@ const alertUser = () => {
       <div>
         {/* Render the list of persons */}
         {persons.map((person, index) => (
-          <div key={index}>{person.name}</div>
+          <div key={index}>{person.name} {person.number}</div>
         ))}
       </div>
     </div>
