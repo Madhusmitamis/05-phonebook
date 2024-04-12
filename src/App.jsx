@@ -11,14 +11,20 @@ const [persons, setPersons] = useState([{ name: 'Arto Hellas' }])
   };
 
   const addPerson = (event) => {
-    event.preventDefault();
+    event.preventDefault()
+    if (persons.some(person => person.name === newName)) {
+        alertUser()
+      } else {
     const personObject = {
       name: newName,
     };
     setPersons(persons.concat(personObject));
-    setNewName(''); // Clear the input field after adding the person
-  };
-
+    setNewName('')
+  }
+}
+const alertUser = () => {
+    alert(`${newName} is already added to the phonebook`)
+  }
   return (
     <div>
       <h2>Phonebook</h2>
