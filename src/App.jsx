@@ -40,11 +40,15 @@ const [persons, setPersons] = useState([])
     const personObject = {
       name: newName,
       number:newNumber
-    };
-    setPersons([...persons,personObject]);
-    setNewName('')
-    setNewNumber('')
-  }
+    }
+    axios
+    .post('http://localhost:3001/persons', personObject)
+    .then(response => {
+      setPersons([...persons, response.data])
+      setNewName('')
+      setNewNumber('')
+    })
+    }
 }
 const alertUser = () => {
     alert(`${newName} is already added to the phonebook`)
