@@ -4,6 +4,8 @@ import './App.css'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
+
 
 const App = () => {
 const [persons, setPersons] = useState([]) 
@@ -12,11 +14,10 @@ const [persons, setPersons] = useState([])
   const [searchFilter, setSearchFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons').then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
  const handleNameChange = (event) => {
@@ -41,10 +42,10 @@ const [persons, setPersons] = useState([])
       name: newName,
       number:newNumber
     }
-    axios
-    .post('http://localhost:3001/persons', personObject)
-    .then(response => {
-      setPersons([...persons, response.data])
+    personService
+    .create(personObject)
+        .then(returnedPerson => {
+          setPersons([...persons, returnedPerson])
       setNewName('')
       setNewNumber('')
     })
