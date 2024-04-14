@@ -39,8 +39,25 @@ const [persons, setPersons] = useState([])
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.some(person => person.name === newName)) {
-        alertUser()
+    const existingPerson = persons.find(person => person.name === newName);
+    if (existingPerson) {
+      const confirmUpdate =`${existingPerson.name} is already added to the phonebook, replace the old number with a new one?`
+      
+      if (window.confirm(confirmUpdate) ){
+        const updatedPerson = { ...existingPerson, number: newNumber };
+        personService
+        .update(existingPerson.id, updatedPerson)
+        .then((returnedPerson) => {
+          setPersons(prevPersons => prevPersons.map(person => person.id === returnedPerson.id ? returnedPerson : person));
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch(error => {
+          console.error('Error updating person:', error);
+          
+        });
+    }
+    
       } else {
     const personObject = {
       name: newName,
@@ -48,11 +65,15 @@ const [persons, setPersons] = useState([])
     }
     personService
     .create(personObject)
-        .then(returnedPerson => {
-          setPersons([...persons, returnedPerson])
+    .then(returnedPerson => {
+      setPersons(prevPersons => [...prevPersons, returnedPerson])
+          setNewName('')
+          setNewNumber('')
         })
-      setNewName('')
-      setNewNumber('')
+        .catch(error => {
+          console.error('Error adding person:', error);
+        });
+      
   
     }
 }
