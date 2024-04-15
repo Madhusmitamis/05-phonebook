@@ -21,27 +21,18 @@ const App = () => {
         setPersons(initialPersons)
       })
   }, [])
-  console.log('render', persons.length, 'persons')
+ 
   
   const addPerson = (event) => {
     event.preventDefault()
-  //   console.log('button clicked', event.target)
-  //   const isNameDuplicate = persons.some(person => person.name === newName);
+  
+     const existingPerson = persons.find(person => person.name === newName);
 
-  // if (isNameDuplicate) {
-  //   // Display a warning using the alert command
-  //   alert(`${newName} is already added to the phonebook`);
-  //   return; // Exit the function early
-  // }
-  const existingPerson = persons.find(person => person.name === newName && person.number === newNumber)
-  if (existingPerson) {
-    const confirmUpdate = `${existingPerson.name} is already added to the phonebook, replace the old number with a new one?`;
+    if (existingPerson) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const updatedPerson = { ...existingPerson, number: newNumber };
 
-    if (window.confirm(confirmUpdate)) {
-      const updatedPerson = { ...existingPerson, number: newNumber };
-
-      personService
-          .update(existingPerson.id, updatedPerson)
+        personService.update(existingPerson.id, updatedPerson)
           .then(updatedPerson => {
             setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
             setNewName('');
@@ -52,21 +43,20 @@ const App = () => {
           });
       }
     } else {
-   const personObject = { name: newName, number: newNumber }
-    
-    personService
-    .create(personObject)
-    .then(returnedPerson => {
-    setPersons([...persons, returnedPerson])
-    setNewName('')
-    setNewNumber('')
-    })
-    .catch(error => {
-      console.error('Error adding person:', error);
-    });
+      const personObject = { name: newName, number: newNumber };
+
+      personService.create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch(error => {
+          console.error('Error adding person:', error);
+        });
+    }
   }
-}
- const handleNameChange = (event) => {
+  const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
   }
@@ -79,8 +69,9 @@ const App = () => {
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(searchFilter.toLowerCase())
   );
+  
 
-  // const Person = ({ person }) => <li>{person.name}</li>;
+
   return (
     <div>
       <h2>Phonebook</h2>
