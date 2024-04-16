@@ -46,7 +46,9 @@ const App = () => {
           })
           .catch(error => {
             console.error('Error updating person:', error);
-            showErrorMessage('Error updating person. Please try again later.');
+            showErrorMessage(`Information of ${updatedPerson.name} has already been removed from server `);
+            
+
           });
       }
     } else {
