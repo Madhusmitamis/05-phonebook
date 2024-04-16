@@ -5,6 +5,7 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from './services/persons'
+import { ErrorNotification, SuccessNotification } from './components/Notification'
 
 
 const App = () => {
@@ -12,6 +13,9 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchFilter, setNewSearchFilter] =  useState('');
+  // const [notification, setNotification] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
 
 
   useEffect(() => {
@@ -37,9 +41,12 @@ const App = () => {
             setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
             setNewName('');
             setNewNumber('');
+            // showNotification(`Number for ${updatedPerson.name} updated successfully!`, 'success')
+            showSuccessMessage(`Number for ${updatedPerson.name} updated successfully!`);
           })
           .catch(error => {
             console.error('Error updating person:', error);
+            showErrorMessage('Error updating person. Please try again later.');
           });
       }
     } else {
@@ -49,12 +56,28 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
-          setNewNumber('');
+          setNewNumber('')
+          showSuccessMessage(`Added ${returnedPerson.name}`);
+          
         })
+        
         .catch(error => {
-          console.error('Error adding person:', error);
+          console.error('Error adding person:', error)
+          showErrorMessage('Error adding person. Please try again later.');
         });
     }
+  }
+  const showSuccessMessage = (message) => {
+    setSuccessMessage(message)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
+  }
+  const showErrorMessage = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -70,11 +93,14 @@ const App = () => {
     person.name.toLowerCase().includes(searchFilter.toLowerCase())
   );
   
+  
 
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <ErrorNotification message={errorMessage} />
+      <SuccessNotification message={successMessage} />
         <Filter searchFilter={searchFilter} handleSearchFilterChange={handleSearchFilterChange} />
 
       
@@ -89,7 +115,12 @@ const App = () => {
 
       <h2>Numbers</h2>
       
-      <Persons persons={filteredPersons} setPersons={setPersons} />
+      <Persons
+       persons={filteredPersons} setPersons={setPersons}
+       showSuccessMessage={showSuccessMessage}
+  showErrorMessage={showErrorMessage}
+
+       />
     </div>
   )
         }

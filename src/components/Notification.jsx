@@ -1,3 +1,17 @@
+import React from 'react'
+
+// const Notification = ({ message, type }) => {
+//   if (!message ) {
+//     return null
+//   }
+
+//   return (
+//     <div className={type}>
+//       {message}
+//     </div>
+//   )
+// }
+// export default Notification
 export const ErrorNotification = ({ message }) => {
   if (message === null) {
     return null

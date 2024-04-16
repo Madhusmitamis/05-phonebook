@@ -1,16 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "1094905",
-      "id": "1"
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": "2"
-    },
-    {
       "name": "Dan Abramov",
       "number": "12-43-234345",
       "id": "3"
@@ -23,12 +13,12 @@
     {
       "id": "2b8d",
       "name": "Juha Tauriainen",
-      "number": "9642649041"
+      "number": "75139758965"
     },
     {
-      "id": "2309",
-      "name": "Madhu Mishra",
-      "number": "4229075025"
+      "id": "2f1f",
+      "name": "Saima Salonen",
+      "number": "385749839"
     }
   ]
 }
